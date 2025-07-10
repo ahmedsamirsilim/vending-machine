@@ -1,15 +1,16 @@
-import dotenv from 'dotenv'
-import express, { type Express } from 'express'
-import productsRouter from './products/routes'
-dotenv.config()
+import dotenv from "dotenv";
+import express, { type Express } from "express";
+import productsRouter from "./products/routes";
 
-const app: Express = express()
-const port = process.env.PORT || 3000
+dotenv.config();
 
-app.use(express.json())
+const app: Express = express();
+const port = process.env.PORT || 3000;
 
-app.use('/api', productsRouter)
+app.use(express.json());
+
+app.use("/api", productsRouter);
 
 app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`)
-})
+	console.log(`[server]: Server is running at http://localhost:${port}`);
+});

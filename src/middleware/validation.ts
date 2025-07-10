@@ -1,5 +1,5 @@
-import type { Request, Response, NextFunction } from "express";
-import { z, type ZodError, type ZodType } from "zod";
+import type { NextFunction, Request, Response } from "express";
+import { type ZodError, type ZodType, z } from "zod";
 
 type ZodErrorDetail = {
 	path: (string | number)[];

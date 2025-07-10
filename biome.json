@@ -1,0 +1,137 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.2/schema.json",
+  "organizeImports": {
+    "ignore": [
+      "./record.json",
+      "./.vscode/**/*",
+      "./out/**/*",
+      "./apps/**/dist/*",
+      "./apps/**/node_modules/*",
+      "./packages/**/dist/*",
+      "./packages/**/node_modules/*",
+      "./packages/cms/modules/encryption/assets/*",
+      "./apps/worker/src/lib/bson.ts",
+      "./apps/worker/src/bundle/workflow-bundle.js",
+      "./packages/migration/migrations/assets/*"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": true,
+    "indentStyle": "space",
+    "lineWidth": 120,
+    "ignore": [
+      "./record.json",
+      "./.vscode/**/*",
+      "./out/**/*",
+      "./apps/**/dist/*",
+      "./apps/**/node_modules/*",
+      "./packages/**/dist/*",
+      "./packages/**/node_modules/*",
+      "./packages/cms/modules/encryption/assets/*",
+      "./apps/worker/src/lib/bson.ts",
+      "./packages/shared/lib/bson.ts",
+      "./apps/worker/src/bundle/workflow-bundle.js",
+      "./packages/migration/migrations/assets/*"
+    ]
+  },
+  "javascript": {
+    "formatter": {
+      "indentWidth": 2,
+      "quoteStyle": "single",
+      "quoteProperties": "asNeeded",
+      "trailingCommas": "all",
+      "semicolons": "asNeeded"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "ignore": [
+      "./record.json",
+      "./.vscode/**/*",
+      "./out/**/*",
+      "./apps/**/dist/*",
+      "./apps/**/node_modules/*",
+      "./packages/**/dist/*",
+      "./packages/**/node_modules/*",
+      "./packages/cms/modules/encryption/assets/*",
+      "./apps/worker/src/lib/bson.ts",
+      "./packages/shared/lib/bson.ts",
+      "./apps/worker/src/bundle/workflow-bundle.js",
+      "./packages/migration/migrations/assets/*"
+    ],
+    "rules": {
+      "recommended": false,
+      "a11y": {},
+      "complexity": {
+        "noForEach": "error",
+        "noBannedTypes": "error",
+        "noExtraBooleanCast": "error",
+        "noMultipleSpacesInRegularExpressionLiterals": "error",
+        "noUselessCatch": "error",
+        "noUselessConstructor": "error",
+        "noUselessLabel": "error",
+        "useFlatMap": "error",
+        "useOptionalChain": "error",
+        "useSimplifiedLogicExpression": "error"
+      },
+      "correctness": {
+        "noConstAssign": "error",
+        "noConstantCondition": "error",
+        "noConstructorReturn": "error",
+        "noEmptyPattern": "error",
+        "noInnerDeclarations": "error",
+        "noNewSymbol": "error",
+        "noPrecisionLoss": "error",
+        "noUndeclaredVariables": "off",
+        "noUnnecessaryContinue": "error",
+        "noUnreachable": "error",
+        "noUnreachableSuper": "error",
+        "noUnsafeFinally": "error",
+        "noUnsafeOptionalChaining": "error",
+        "noUnusedVariables": "error",
+        "useValidForDirection": "error",
+        "noUnusedImports": "error"
+      },
+      "performance": {
+        "noDelete": "error"
+      },
+      "security": {},
+      "style": {
+        "noArguments": "error",
+        "noNegationElse": "error",
+        "noUnusedTemplateLiteral": "error",
+        "noVar": "error",
+        "useConst": "error",
+        "useBlockStatements": "error",
+        "useDefaultParameterLast": "error",
+        "useExponentiationOperator": "error",
+        "useNumericLiterals": "error",
+        "useSingleVarDeclarator": "error",
+        "useTemplate": "error",
+        "useWhile": "error"
+      },
+      "suspicious": {
+        "noAsyncPromiseExecutor": "error",
+        "noCatchAssign": "error",
+        "noCompareNegZero": "error",
+        "noDebugger": "error",
+        "noDoubleEquals": "error",
+        "noDuplicateParameters": "error",
+        "noDuplicateClassMembers": "error",
+        "noDuplicateObjectKeys": "error",
+        "noExplicitAny": "off",
+        "noFunctionAssign": "error",
+        "noImportAssign": "error",
+        "noRedeclare": "error",
+        "noLabelVar": "error",
+        "noSelfCompare": "error",
+        "noShadowRestrictedNames": "error",
+        "noSparseArray": "error",
+        "noUnsafeNegation": "error",
+        "useValidTypeof": "error",
+        "useDefaultSwitchClauseLast": "error"
+      }
+    }
+  }
+}
