@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE settings
+.vscode/
+.idea/
+
+# Coverage output (e.g., from Jest)
+coverage/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Optional: Ignore compiled routes or temp files
+temp/
+*.tmp
+
+# Optional: Ignore next versioned docs (if generated)
+docs/
