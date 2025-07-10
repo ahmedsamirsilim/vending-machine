@@ -5,6 +5,7 @@ import {
 	validateRequest,
 	validateResponse,
 } from "../../../middleware";
+import { ProductUseCase } from "../../usecases";
 
 const productRouterV1 = Router();
 productRouterV1.use(authenticate);
@@ -28,13 +29,11 @@ productRouterV1.post(
 	),
 	(req: Request, res: Response) => {
 		const { name, price, quantity } = req.body;
-		const newProduct = {
-			id: Date.now(),
-			name,
-			price,
-			quantity,
-		};
-		res.status(201).json(newProduct);
+		const createProduct = ProductUseCase.CreateProduct({
+			title: name,
+			price: price,
+		});
+		res.status(201).json(createProduct);
 	},
 );
 
