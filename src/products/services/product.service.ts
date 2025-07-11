@@ -1,6 +1,6 @@
 import type { FilterQuery } from "mongoose";
+import type { IProduct } from "../db/";
 import { Models } from "../db/product.model";
-import type { IProduct } from "../db/product.schema";
 import type {
 	CreateProductInput,
 	DeleteProductInput,
