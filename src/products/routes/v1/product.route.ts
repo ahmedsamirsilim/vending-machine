@@ -5,6 +5,7 @@ import {
 	validateRequest,
 	validateResponse,
 } from "../../../middleware";
+import { NotFoundError } from "../../../shared";
 import {
 	CreateProductDto,
 	ProductResponseDto,
@@ -62,7 +63,7 @@ productRouterV1.get(
 			const { id } = req.params;
 			const product = await ProductUseCase.FindProduct({ id });
 			if (!product) {
-				return res.status(404).json({ error: "Product not found" });
+				return NotFoundError(res);
 			}
 			res.status(200).json(product);
 		} catch (error) {
