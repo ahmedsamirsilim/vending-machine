@@ -10,20 +10,14 @@ export const UserSchema = z.object({
 	updatedAt: z.date(),
 });
 
-export const CreateUserSchema = z.object({
-	body: z.object({
-		username: z.string({ required_error: "Username is required" }),
-		password: z
-			.string({ required_error: "Password is required" })
-			.min(6, "Password must be at least 6 characters long"),
-		role: z.enum(["buyer", "seller"]).optional(),
-	}),
+export const CreateUserDto = z.object({
+	username: z.string(),
+	password: z.string().min(6, "Password must be at least 6 characters long"),
+	role: z.enum(["buyer", "seller"]),
 });
 
-export const UpdateUserSchema = z.object({
-	params: z.object({
-		id: zObjectId,
-	}),
+export const UpdateUserDto = z.object({
+	id: zObjectId,
 	body: z
 		.object({
 			username: z.string().optional(),
@@ -37,20 +31,16 @@ export const UpdateUserSchema = z.object({
 		.partial(),
 });
 
-export const GetUserSchema = z.object({
-	params: z.object({
-		id: zObjectId,
-	}),
+export const GetUserDto = z.object({
+	id: zObjectId,
 });
 
-export const DeleteUserSchema = z.object({
-	params: z.object({
-		id: zObjectId,
-	}),
+export const DeleteUserDto = z.object({
+	id: zObjectId,
 });
 
 export type User = z.infer<typeof UserSchema>;
-export type CreateUserInput = z.infer<typeof CreateUserSchema>;
-export type UpdateUserInput = z.infer<typeof UpdateUserSchema>;
-export type GetUserInput = z.infer<typeof GetUserSchema>;
-export type DeleteUserInput = z.infer<typeof DeleteUserSchema>;
+export type CreateUserInput = z.infer<typeof CreateUserDto>;
+export type UpdateUserInput = z.infer<typeof UpdateUserDto>;
+export type GetUserInput = z.infer<typeof GetUserDto>;
+export type DeleteUserInput = z.infer<typeof DeleteUserDto>;

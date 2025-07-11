@@ -1,18 +1,18 @@
 import { type Request, type Response, Router } from "express";
 import { validateRequest, validateResponse } from "../../../middleware";
 import {
-	CreateUserSchema,
-	DeleteUserSchema,
-	GetUserSchema,
-	UpdateUserSchema,
-} from "../../../users/dtos";
-import { UserUseCase } from "../../../users/usecases";
+	CreateUserDto,
+	DeleteUserDto,
+	GetUserDto,
+	UpdateUserDto,
+} from "../../dtos";
+import { UserUseCase } from "../../usecases";
 
 const userRouterV1 = Router();
 
 userRouterV1.post(
 	"/",
-	validateRequest(CreateUserSchema),
+	validateRequest(CreateUserDto),
 	async (req: Request, res: Response) => {
 		const user = await UserUseCase.createUser(req.body);
 		res.status(201).json(user);
@@ -26,7 +26,7 @@ userRouterV1.get("/", async (_: Request, res: Response) => {
 
 userRouterV1.get(
 	"/:id",
-	validateRequest(GetUserSchema),
+	validateRequest(GetUserDto),
 	async (req: Request, res: Response) => {
 		const user = await UserUseCase.getUserById(req.params.id);
 		if (!user) {
@@ -38,7 +38,7 @@ userRouterV1.get(
 
 userRouterV1.put(
 	"/:id",
-	validateRequest(UpdateUserSchema),
+	validateRequest(UpdateUserDto),
 	async (req: Request, res: Response) => {
 		const user = await UserUseCase.updateUser(req.params.id, req.body);
 		if (!user) {
@@ -50,7 +50,7 @@ userRouterV1.put(
 
 userRouterV1.delete(
 	"/:id",
-	validateRequest(DeleteUserSchema),
+	validateRequest(DeleteUserDto),
 	async (req: Request, res: Response) => {
 		await UserUseCase.deleteUser(req.params.id);
 		res.status(204).send();
