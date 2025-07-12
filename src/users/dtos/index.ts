@@ -12,6 +12,28 @@ export const User = z
 	})
 	.partial();
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     CreateUserDto:
+ *       type: object
+ *       required:
+ *         - username
+ *         - password
+ *         - role
+ *       properties:
+ *         username:
+ *           type: string
+ *           default: johndoe
+ *         password:
+ *           type: string
+ *           default: password123
+ *         role:
+ *           type: string
+ *           enum: [buyer, seller]
+ *           default: buyer
+ */
 export const CreateUserDto = z.object({
 	username: z.string(),
 	password: z.string().min(6, "Password must be at least 6 characters long"),
@@ -22,6 +44,17 @@ export const UpdateUserParams = z.object({
 	id: zObjectId,
 });
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     UpdateUserDto:
+ *       type: object
+ *       properties:
+ *         deposit:
+ *           type: number
+ *           default: 0
+ */
 export const UpdateUserDto = z.object({
 	username: z.string().optional(),
 	password: z

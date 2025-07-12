@@ -52,6 +52,32 @@ userRouterV1.get(
 	},
 );
 
+/**
+ * @openapi
+ * /users/{id}:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Get a single user by ID
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: User data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: User not found
+ */
 userRouterV1.get(
 	"/:id",
 	authenticate,
@@ -67,6 +93,34 @@ userRouterV1.get(
 	},
 );
 
+/**
+ * @openapi
+ * /users/{id}:
+ *   put:
+ *     tags:
+ *       - Users
+ *     summary: Update a user
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateUserDto'
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       404:
+ *         description: User not found
+ */
 userRouterV1.put(
 	"/:id",
 	authenticate,
@@ -86,6 +140,28 @@ userRouterV1.put(
 	},
 );
 
+/**
+ * @openapi
+ * /users/{id}:
+ *   delete:
+ *     tags:
+ *       - Users
+ *     summary: Delete a user
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ */
 userRouterV1.delete(
 	"/:id",
 	authenticate,

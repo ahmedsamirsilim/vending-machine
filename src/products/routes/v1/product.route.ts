@@ -17,6 +17,31 @@ import { ProductUseCase } from "../../usecases";
 const productRouterV1 = Router();
 productRouterV1.use(authenticate);
 
+/**
+ * @openapi
+ * /products:
+ *   post:
+ *     tags:
+ *       - Products
+ *     summary: Create a new product
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateProductDto'
+ *     responses:
+ *       201:
+ *         description: Product created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Bad request
+ */
 productRouterV1.post(
 	"/",
 	validateRequest({ body: CreateProductDto }),
@@ -40,6 +65,25 @@ productRouterV1.post(
 	},
 );
 
+/**
+ * @openapi
+ * /products:
+ *   get:
+ *     tags:
+ *       - Products
+ *     summary: Retrieve a list of all products
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of products.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ */
 productRouterV1.get(
 	"/",
 	validateResponse(z.array(ProductResponseDto)),
@@ -56,6 +100,32 @@ productRouterV1.get(
 	},
 );
 
+/**
+ * @openapi
+ * /products/{id}:
+ *   get:
+ *     tags:
+ *       - Products
+ *     summary: Get a single product by ID
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The product ID
+ *     responses:
+ *       200:
+ *         description: Product data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: Product not found
+ */
 productRouterV1.get(
 	"/:id",
 	validateResponse(ProductResponseDto),
@@ -78,6 +148,34 @@ productRouterV1.get(
 	},
 );
 
+/**
+ * @openapi
+ * /products/{id}:
+ *   put:
+ *     tags:
+ *       - Products
+ *     summary: Update a product
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The product ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateProductDto'
+ *     responses:
+ *       200:
+ *         description: Product updated successfully
+ *       404:
+ *         description: Product not found
+ */
 productRouterV1.put(
 	"/:id",
 	validateRequest({
