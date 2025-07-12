@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+
 import { ObjectId } from "mongodb";
 import { ERROR_CODES, UnauthorizedError } from "../shared";
 import { UserUseCase } from "../users/usecases";
@@ -11,7 +12,7 @@ export const authenticate = async (
 ) => {
 	try {
 		const token = req.headers.authorization?.split(" ")[1];
-		console.log(token);
+
 		if (!token) {
 			return UnauthorizedError(_res, ERROR_CODES.USER_UNAUTHORIZED);
 		}
@@ -25,9 +26,18 @@ export const authenticate = async (
 			return UnauthorizedError(_res, ERROR_CODES.USER_UNAUTHORIZED);
 		}
 
-		const user = await UserUseCase.getUser({
+		const user = await UserUseCase.GetUser({
 			_id: new ObjectId(decodedToken.userId),
 		});
+
+		if (!user) {
+			return UnauthorizedError(_res, ERROR_CODES.USER_UNAUTHORIZED);
+		}
+
+		if (!req.ctx) {
+			req.ctx = { user: undefined };
+		}
+		req.ctx.user = user;
 
 		next();
 	} catch (error) {

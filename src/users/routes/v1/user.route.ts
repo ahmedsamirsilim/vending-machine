@@ -24,7 +24,7 @@ userRouterV1.post(
 	async (req: Request, res: Response) => {
 		const { body } = req;
 		body.password = await BcryptService.hashPassword(body.password);
-		const user = await UserUseCase.createUser(body);
+		const user = await UserUseCase.CreateUser(body);
 		res.status(201).json(user);
 	},
 );
@@ -35,7 +35,7 @@ userRouterV1.get(
 		body: z.object({ username: z.string(), password: z.string() }),
 	}),
 	async (req: Request, res: Response) => {
-		const user = await UserUseCase.getUser({ username: req.body.username });
+		const user = await UserUseCase.GetUser({ username: req.body.username });
 
 		if (!user) {
 			return NotFoundError(res, ERROR_CODES.USER_NOT_FOUND);
@@ -57,7 +57,7 @@ userRouterV1.get(
 	authenticate,
 	validateRequest({ params: GetUserDto }),
 	async (req: Request, res: Response) => {
-		const user = await UserUseCase.getUser({
+		const user = await UserUseCase.GetUser({
 			_id: new ObjectId(req.params.id),
 		});
 		if (!user) {
@@ -75,7 +75,10 @@ userRouterV1.put(
 		body: UpdateUserDto,
 	}),
 	async (req: Request, res: Response) => {
-		const user = await UserUseCase.updateUser(req.params.id, req.body);
+		const user = await UserUseCase.UpdateUser(
+			{ _id: new ObjectId(req.params.id) },
+			req.body,
+		);
 		if (!user) {
 			return NotFoundError(res, ERROR_CODES.USER_NOT_FOUND);
 		}
@@ -88,7 +91,7 @@ userRouterV1.delete(
 	authenticate,
 	validateRequest({ params: DeleteUserDto }),
 	async (req: Request, res: Response) => {
-		await UserUseCase.deleteUser(req.params.id);
+		await UserUseCase.DeleteUser({ _id: new ObjectId(req.params.id) });
 		res.status(204).send();
 	},
 );

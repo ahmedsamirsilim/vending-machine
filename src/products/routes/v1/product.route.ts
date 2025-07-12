@@ -1,4 +1,5 @@
 import { type Request, type Response, Router } from "express";
+import { ObjectId } from "mongodb";
 import { z } from "zod";
 import {
 	authenticate,
@@ -44,7 +45,7 @@ productRouterV1.get(
 	validateResponse(z.array(ProductResponseDto)),
 	async (req: Request, res: Response) => {
 		try {
-			const products = await ProductUseCase.FindProducts();
+			const products = await ProductUseCase.FindProducts({});
 			res.status(200).json(products);
 		} catch (error) {
 			res.status(400).json({
@@ -61,7 +62,9 @@ productRouterV1.get(
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
-			const product = await ProductUseCase.FindProduct({ id });
+			const product = await ProductUseCase.FindProduct({
+				_id: new ObjectId(id),
+			});
 			if (!product) {
 				return NotFoundError(res, ERROR_CODES.PRODUCT_NOT_FOUND);
 			}
@@ -86,7 +89,10 @@ productRouterV1.put(
 		try {
 			const { id } = req.params;
 			const updateData = req.body;
-			const result = await ProductUseCase.UpdateProduct({ id }, updateData);
+			const result = await ProductUseCase.UpdateProduct(
+				{ _id: new ObjectId(id) },
+				updateData,
+			);
 			if (result.modifiedCount === 0) {
 				return res.status(404).json({ error: "Product not found" });
 			}
@@ -106,7 +112,9 @@ productRouterV1.delete(
 	async (req: Request, res: Response) => {
 		try {
 			const { id } = req.params;
-			const result = await ProductUseCase.DeleteProduct({ id });
+			const result = await ProductUseCase.DeleteProduct({
+				_id: new ObjectId(id),
+			});
 			if (result.deletedCount === 0) {
 				return res.status(404).json({ error: "Product not found" });
 			}

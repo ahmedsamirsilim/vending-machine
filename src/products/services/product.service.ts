@@ -4,8 +4,8 @@ import { Models } from "../db/product.model";
 import type {
 	CreateProductInput,
 	DeleteProductInput,
-	FindProductInput,
 	ProductResponse,
+	ProductSchema,
 	UpdateProductInput,
 } from "../dtos";
 
@@ -22,7 +22,7 @@ const createProduct = async (
 	}
 };
 
-const findProduct = async (query: FindProductInput) => {
+const findProduct = async (query: ProductSchema) => {
 	try {
 		const product = await Models.Product.findOne(query);
 		return product ? product.toObject() : null;
@@ -33,7 +33,7 @@ const findProduct = async (query: FindProductInput) => {
 	}
 };
 
-const findProducts = async (query: FindProductInput = {}) => {
+const findProducts = async (query: ProductSchema = {}) => {
 	try {
 		const products = await Models.Product.find(query);
 		return products.map((product) => product.toObject());

@@ -1,40 +1,31 @@
 import type {
 	CreateProductInput,
 	DeleteProductInput,
-	FindProductInput,
-	ProductResponse,
+	ProductSchema,
 	UpdateProductInput,
 } from "../dtos";
 import { ProductService } from "../services";
 
-const CreateProduct = async (
-	product: CreateProductInput,
-): Promise<ProductResponse> => {
+const CreateProduct = async (product: CreateProductInput) => {
 	return ProductService.createProduct(product);
 };
 
 const UpdateProduct = async (
-	query: FindProductInput,
+	query: ProductSchema,
 	updateData: UpdateProductInput,
-): Promise<{ modifiedCount: number }> => {
+) => {
 	return ProductService.updateProduct(query, updateData);
 };
 
-const DeleteProduct = async (
-	query: DeleteProductInput,
-): Promise<{ deletedCount: number }> => {
+const DeleteProduct = async (query: ProductSchema) => {
 	return ProductService.deleteProduct(query);
 };
 
-const FindProduct = async (
-	query: FindProductInput,
-): Promise<ProductResponse | null> => {
+const FindProduct = async (query: ProductSchema) => {
 	return ProductService.findProduct(query);
 };
 
-const FindProducts = async (
-	query: FindProductInput = {},
-): Promise<ProductResponse[]> => {
+const FindProducts = async (query: ProductSchema) => {
 	return ProductService.findProducts(query);
 };
 

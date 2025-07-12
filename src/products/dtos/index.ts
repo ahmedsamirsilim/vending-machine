@@ -18,14 +18,16 @@ export const UpdateProductDto = z.object({
 		.optional(),
 });
 
-export const FindProductDto = z.object({
-	id: z.string().optional(),
-	name: z.string().optional(),
-	sellerId: z.string().optional(),
-});
+export const FindProductDto = z
+	.object({
+		_id: zObjectId,
+		name: z.string().optional(),
+		sellerId: zObjectId,
+	})
+	.partial();
 
 export const DeleteProductDto = z.object({
-	id: z.string().min(1, "Product ID is required"),
+	id: zObjectId,
 });
 
 export const ProductResponseDto = z.object({
@@ -41,7 +43,7 @@ export const ProductListResponseDto = z.array(ProductResponseDto);
 
 export type CreateProductInput = z.infer<typeof CreateProductDto>;
 export type UpdateProductInput = z.infer<typeof UpdateProductDto>;
-export type FindProductInput = z.infer<typeof FindProductDto>;
+export type ProductSchema = z.infer<typeof FindProductDto>;
 export type DeleteProductInput = z.infer<typeof DeleteProductDto>;
 export type ProductResponse = z.infer<typeof ProductResponseDto>;
 export type ProductListResponse = z.infer<typeof ProductListResponseDto>;

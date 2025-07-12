@@ -13,14 +13,14 @@ const findUsers = async () => {
 	return await User.find().select("-password");
 };
 
-const updateUser = async (id: string, input: UpdateUserInput) => {
-	return await User.findByIdAndUpdate(id, input, { new: true }).select(
-		"-password",
-	);
+const updateUser = async (UserSchema: UserSchema, input: UpdateUserInput) => {
+	return await User.findByIdAndUpdate(UserSchema, input, {
+		new: true,
+	}).select("-password");
 };
 
-const deleteUser = async (id: string) => {
-	return await User.findByIdAndDelete(id);
+const deleteUser = async (UserSchema: UserSchema) => {
+	return await User.findByIdAndDelete(UserSchema._id);
 };
 
 export const UserServices = {
