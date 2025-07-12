@@ -1,31 +1,72 @@
 import { ObjectId } from "mongodb";
-import { IProduct } from "../db/product.schema";
-import { ProductUseCase } from "../usecases";
+import { ProductService } from "../services";
+import { ProductUseCase } from "../usecases/product.usercase";
 
-jest.mock("../db/product.model");
+jest.mock("../services");
 
 describe("ProductUseCase", () => {
+	const mockProduct = {
+		_id: new ObjectId(),
+		name: "Test Product",
+		cost: 100,
+		quantity: 10,
+		sellerId: new ObjectId(),
+	};
+
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
 	describe("CreateProduct", () => {
-		it("should create a new product", async () => {
-			const productData = {
-				name: "Test Product",
-				cost: 100,
-				quantity: 10,
-				sellerId: new ObjectId("67fcd0bd2401ff5addef1d02"),
-			};
+		it("should call ProductService.createProduct and return a product", async () => {
+			const productData = { name: "Test Product", cost: 100, quantity: 10, sellerId: new ObjectId() };
+			(ProductService.createProduct as jest.Mock).mockResolvedValue(mockProduct);
 
-			(ProductUseCase.CreateProduct as jest.Mock).mockResolvedValue(
-				productData,
-			);
+			const result = await ProductUseCase.CreateProduct(productData);
 
-			const product = await ProductUseCase.CreateProduct(productData);
+			expect(ProductService.createProduct).toHaveBeenCalledWith(productData);
+			expect(result).toEqual(mockProduct);
+		});
+	});
 
-			expect(product).toBeDefined();
-			expect(product.name).toBe(productData.name);
+	describe("UpdateProduct", () => {
+		it("should call ProductService.updateProduct", async () => {
+			const query = { _id: mockProduct._id };
+			const updateData = { cost: 150 };
+			await ProductUseCase.UpdateProduct(query, updateData);
+			expect(ProductService.updateProduct).toHaveBeenCalledWith(query, updateData);
+		});
+	});
+
+	describe("DeleteProduct", () => {
+		it("should call ProductService.deleteProduct", async () => {
+			const query = { _id: mockProduct._id };
+			await ProductUseCase.DeleteProduct(query);
+			expect(ProductService.deleteProduct).toHaveBeenCalledWith(query);
+		});
+	});
+
+	describe("FindProduct", () => {
+		it("should call ProductService.findProduct and return a product", async () => {
+			const query = { _id: mockProduct._id };
+			(ProductService.findProduct as jest.Mock).mockResolvedValue(mockProduct);
+
+			const result = await ProductUseCase.FindProduct(query);
+
+			expect(ProductService.findProduct).toHaveBeenCalledWith(query);
+			expect(result).toEqual(mockProduct);
+		});
+	});
+
+	describe("FindProducts", () => {
+		it("should call ProductService.findProducts and return products", async () => {
+			const query = { sellerId: mockProduct.sellerId };
+			(ProductService.findProducts as jest.Mock).mockResolvedValue([mockProduct]);
+
+			const result = await ProductUseCase.FindProducts(query);
+
+			expect(ProductService.findProducts).toHaveBeenCalledWith(query);
+			expect(result).toEqual([mockProduct]);
 		});
 	});
 });

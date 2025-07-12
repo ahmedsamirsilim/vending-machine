@@ -25,7 +25,7 @@ This project is a RESTful API for a vending machine application, built with Node
 
 - Node.js (v18 or later)
 - pnpm
-- MongoDB instance "since this is a small project we are using mongodb instead of relational (transactional) db , instead we could use workflow like (temporal) to support mongodb"
+- MongoDB instance "Since this is a small project, we're using MongoDB instead of a relational (transactional) database. To ensure consistency, we can use a workflow engine like Temporal to coordinate operations."
 
 ## Getting Started
 
