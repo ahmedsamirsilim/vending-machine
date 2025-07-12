@@ -5,7 +5,7 @@ import {
 	validateRequest,
 	validateResponse,
 } from "../../../middleware";
-import { NotFoundError } from "../../../shared";
+import { ERROR_CODES, NotFoundError } from "../../../shared";
 import {
 	CreateProductDto,
 	ProductResponseDto,
@@ -18,7 +18,7 @@ productRouterV1.use(authenticate);
 
 productRouterV1.post(
 	"/",
-	validateRequest(CreateProductDto),
+	validateRequest({ body: CreateProductDto }),
 	validateResponse(ProductResponseDto),
 	async (req: Request, res: Response) => {
 		try {
@@ -63,7 +63,7 @@ productRouterV1.get(
 			const { id } = req.params;
 			const product = await ProductUseCase.FindProduct({ id });
 			if (!product) {
-				return NotFoundError(res);
+				return NotFoundError(res, ERROR_CODES.PRODUCT_NOT_FOUND);
 			}
 			res.status(200).json(product);
 		} catch (error) {
@@ -77,7 +77,10 @@ productRouterV1.get(
 
 productRouterV1.put(
 	"/:id",
-	validateRequest(UpdateProductDto),
+	validateRequest({
+		params: z.object({ id: z.string().min(1, "Product ID is required") }),
+		body: UpdateProductDto,
+	}),
 	validateResponse(z.object({ modifiedCount: z.number() })),
 	async (req: Request, res: Response) => {
 		try {

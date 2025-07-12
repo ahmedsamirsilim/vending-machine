@@ -13,10 +13,7 @@ export const getAllUsers = async () => {
 	return await UserService.findUsers();
 };
 
-export const updateUser = async (
-	id: string,
-	input: UpdateUserInput["body"],
-) => {
+export const updateUser = async (id: string, input: UpdateUserInput) => {
 	return await UserService.updateUser(id, input);
 };
 

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { zObjectId } from "../../shared";
 
 export const UserSchema = z.object({
-	id: zObjectId,
+	_id: zObjectId,
 	username: z.string(),
 	deposit: z.number(),
 	role: z.enum(["buyer", "seller"]),
@@ -16,19 +16,18 @@ export const CreateUserDto = z.object({
 	role: z.enum(["buyer", "seller"]),
 });
 
-export const UpdateUserDto = z.object({
+export const UpdateUserParams = z.object({
 	id: zObjectId,
-	body: z
-		.object({
-			username: z.string().optional(),
-			password: z
-				.string()
-				.min(6, "Password must be at least 6 characters long")
-				.optional(),
-			deposit: z.number().optional(),
-			role: z.enum(["buyer", "seller"]).optional(),
-		})
-		.partial(),
+});
+
+export const UpdateUserDto = z.object({
+	username: z.string().optional(),
+	password: z
+		.string()
+		.min(6, "Password must be at least 6 characters long")
+		.optional(),
+	deposit: z.number().optional(),
+	role: z.enum(["buyer", "seller"]).optional(),
 });
 
 export const GetUserDto = z.object({
