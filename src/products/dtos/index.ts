@@ -72,6 +72,8 @@ export const FindProductDto = z
 		_id: zObjectId,
 		name: z.string().optional(),
 		sellerId: zObjectId,
+		cost: z.number().optional(),
+		quantity: z.number().optional(),
 	})
 	.partial();
 

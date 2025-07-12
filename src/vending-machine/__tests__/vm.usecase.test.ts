@@ -23,7 +23,7 @@ describe("VMUseCase", () => {
 			};
 			const product: ProductSchema = {
 				_id: new ObjectId(),
-				productName: "Test Soda",
+				name: "Test Soda",
 				cost: 50,
 				quantity: 5,
 				sellerId: new ObjectId(),
@@ -33,7 +33,11 @@ describe("VMUseCase", () => {
 			(UserUseCase.UpdateUser as jest.Mock).mockResolvedValue({});
 			(ProductUseCase.UpdateProduct as jest.Mock).mockResolvedValue({});
 
-			const result = await VMUseCase.BuyProduct(user, product._id, 1);
+			const result = await VMUseCase.BuyProduct(
+				user,
+				product._id ?? new ObjectId(),
+				1,
+			);
 
 			expect(result.totalSpent).toBe(50);
 			expect(result.productPurchased).toBe("Test Soda");
