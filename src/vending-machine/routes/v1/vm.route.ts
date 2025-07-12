@@ -15,6 +15,7 @@ import {
 	zObjectId,
 } from "../../../shared";
 import { UserUseCase } from "../../../users/usecases";
+import { VMUseCase } from "../../usecases";
 
 const vmRouterV1 = Router();
 vmRouterV1.use(authenticate);
@@ -86,8 +87,6 @@ vmRouterV1.post(
 		}),
 	}),
 	async (req: Request, res: Response) => {
-		const { productId, quantity } = req.body;
-
 		if (!req.ctx.user) {
 			return NotFoundError(res, ERROR_CODES.USER_NOT_FOUND);
 		}
@@ -96,44 +95,12 @@ vmRouterV1.post(
 			return BadRequestError(res, ERROR_CODES.USER_INSUFFICIENT_TYPE);
 		}
 
-		const product = await ProductUseCase.FindProduct({
-			_id: new ObjectId(productId),
-		});
-
-		if (!product) {
-			return NotFoundError(res, ERROR_CODES.PRODUCT_NOT_FOUND);
-		}
-
-		if (product.quantity < quantity) {
-			return BadRequestError(res, ERROR_CODES.PRODUCT_INSUFFICIENT_QUANTITY);
-		}
-
-		if (product.cost * quantity > (req.ctx.user?.deposit ?? 0)) {
-			return BadRequestError(res, ERROR_CODES.USER_INSUFFICIENT_DEPOSIT);
-		}
-
-		await Promise.all([
-			UserUseCase.UpdateUser(
-				{
-					_id: new ObjectId(req.ctx.user._id),
-				},
-				{
-					deposit: (req.ctx.user?.deposit ?? 0) - product.cost * quantity,
-				},
-			),
-
-			ProductUseCase.UpdateProduct(
-				{
-					_id: new ObjectId(productId),
-				},
-				{
-					quantity: product.quantity - quantity,
-				},
-			),
-		]);
-		res.status(200).json({
-			message: "product bought successfully",
-		});
+		const result = await VMUseCase.BuyProduct(
+			req.ctx.user,
+			new ObjectId(req.body.productId),
+			req.body.quantity,
+		);
+		res.status(200).json(result);
 	},
 );
 
