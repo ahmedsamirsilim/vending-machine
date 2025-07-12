@@ -88,3 +88,11 @@ src/
 ├── utils/         # Utility functions (e.g., Swagger config)
 └── app.ts         # Express app setup and entry point
 ```
+
+## Future Improvements
+
+- [ ] **Database Migrations**: Implement a migration command and scripts to manage database schema changes.
+- [ ] **Workflow Engine**: Integrate a workflow engine like Temporal to ensure transactional consistency for complex operations.
+- [ ] **CI/CD Pipeline**: Set up a CI/CD pipeline for automated testing and deployment.
+- [ ] **Dockerization**: Containerize the application using Docker for portability and simplified deployments.
+- [ ] **End-to-End Testing**: Add end-to-end tests to simulate real user scenarios.
