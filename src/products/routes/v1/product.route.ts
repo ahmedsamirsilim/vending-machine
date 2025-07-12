@@ -6,7 +6,12 @@ import {
 	validateRequest,
 	validateResponse,
 } from "../../../middleware";
-import { ERROR_CODES, NotFoundError } from "../../../shared";
+import {
+	BadRequestError,
+	ERROR_CODES,
+	NotFoundError,
+	zObjectId,
+} from "../../../shared";
 import {
 	CreateProductDto,
 	ProductResponseDto,
@@ -47,21 +52,19 @@ productRouterV1.post(
 	validateRequest({ body: CreateProductDto }),
 	validateResponse(ProductResponseDto),
 	async (req: Request, res: Response) => {
-		try {
-			const { name, cost, quantity, sellerId } = req.body;
-			const createProduct = await ProductUseCase.CreateProduct({
-				name,
-				cost,
-				quantity,
-				sellerId,
-			});
-			res.status(201).json(createProduct);
-		} catch (error) {
-			res.status(400).json({
-				error:
-					error instanceof Error ? error.message : "Failed to create product",
-			});
+		const { name, cost, quantity } = req.body;
+
+		if (req.ctx.user?.role !== "seller") {
+			return NotFoundError(res, ERROR_CODES.USER_INSUFFICIENT_TYPE);
 		}
+
+		const createProduct = await ProductUseCase.CreateProduct({
+			name,
+			cost,
+			quantity,
+			sellerId: req.ctx.user?._id ?? new ObjectId(),
+		});
+		res.status(201).json(createProduct);
 	},
 );
 
@@ -88,15 +91,8 @@ productRouterV1.get(
 	"/",
 	validateResponse(z.array(ProductResponseDto)),
 	async (req: Request, res: Response) => {
-		try {
-			const products = await ProductUseCase.FindProducts({});
-			res.status(200).json(products);
-		} catch (error) {
-			res.status(400).json({
-				error:
-					error instanceof Error ? error.message : "Failed to fetch products",
-			});
-		}
+		const products = await ProductUseCase.FindProducts({});
+		res.status(200).json(products);
 	},
 );
 
@@ -130,21 +126,14 @@ productRouterV1.get(
 	"/:id",
 	validateResponse(ProductResponseDto),
 	async (req: Request, res: Response) => {
-		try {
-			const { id } = req.params;
-			const product = await ProductUseCase.FindProduct({
-				_id: new ObjectId(id),
-			});
-			if (!product) {
-				return NotFoundError(res, ERROR_CODES.PRODUCT_NOT_FOUND);
-			}
-			res.status(200).json(product);
-		} catch (error) {
-			res.status(400).json({
-				error:
-					error instanceof Error ? error.message : "Failed to fetch product",
-			});
+		const { id } = req.params;
+		const product = await ProductUseCase.FindProduct({
+			_id: new ObjectId(id),
+		});
+		if (!product) {
+			return NotFoundError(res, ERROR_CODES.PRODUCT_NOT_FOUND);
 		}
+		res.status(200).json(product);
 	},
 );
 
@@ -177,52 +166,71 @@ productRouterV1.get(
  *         description: Product not found
  */
 productRouterV1.put(
-	"/:id",
+	"/:productId",
 	validateRequest({
-		params: z.object({ id: z.string().min(1, "Product ID is required") }),
-		body: UpdateProductDto,
+		params: z.object({ productId: zObjectId }),
+		body: z
+			.object({
+				name: z.string().optional(),
+				cost: z.number().optional(),
+				quantity: z.number().optional(),
+			})
+			.refine((data) => Object.keys(data).length > 0, {
+				message: "At least one of name, cost, or quantity must be provided",
+			}),
 	}),
-	validateResponse(z.object({ modifiedCount: z.number() })),
 	async (req: Request, res: Response) => {
-		try {
-			const { id } = req.params;
-			const updateData = req.body;
-			const result = await ProductUseCase.UpdateProduct(
-				{ _id: new ObjectId(id) },
-				updateData,
-			);
-			if (result.modifiedCount === 0) {
-				return res.status(404).json({ error: "Product not found" });
-			}
-			res.status(200).json(result);
-		} catch (error) {
-			res.status(400).json({
-				error:
-					error instanceof Error ? error.message : "Failed to update product",
-			});
+		const { productId } = req.params;
+
+		/*
+		  -- we could use workflow here to support isolation and serlizable execution
+		  -- or we could use findAndUpdate if we don't care about who own the product 
+		  -- or cache product data in memory and validate the update direct,
+		  etc...
+		*/
+
+		//TODO: use workflow temporal
+
+		const product = await ProductUseCase.FindProduct({
+			_id: new ObjectId(productId),
+		});
+
+		if (!product) {
+			return NotFoundError(res, ERROR_CODES.PRODUCT_NOT_FOUND);
 		}
+
+		console.log(req.ctx.user);
+		console.log(product.sellerId);
+
+		if (
+			!req.ctx.user ||
+			product.sellerId.toString() !== req.ctx.user?._id?.toString()
+		) {
+			return BadRequestError(res, ERROR_CODES.PRODUCT_INSUFFICIENT_OWNER);
+		}
+
+		const updateData = req.body;
+		const result = await ProductUseCase.UpdateProduct(
+			{ _id: new ObjectId(productId) },
+			updateData,
+		);
+
+		res.status(200).json(result);
 	},
 );
 
 productRouterV1.delete(
-	"/:id",
+	"/:productId",
 	validateResponse(z.object({ deletedCount: z.number() })),
 	async (req: Request, res: Response) => {
-		try {
-			const { id } = req.params;
-			const result = await ProductUseCase.DeleteProduct({
-				_id: new ObjectId(id),
-			});
-			if (result.deletedCount === 0) {
-				return res.status(404).json({ error: "Product not found" });
-			}
-			res.status(200).json(result);
-		} catch (error) {
-			res.status(400).json({
-				error:
-					error instanceof Error ? error.message : "Failed to delete product",
-			});
+		const { productId } = req.params;
+		const result = await ProductUseCase.DeleteProduct({
+			_id: new ObjectId(productId),
+		});
+		if (result.deletedCount === 0) {
+			return NotFoundError(res, ERROR_CODES.PRODUCT_NOT_FOUND);
 		}
+		res.status(200).json(result);
 	},
 );
 

@@ -49,8 +49,10 @@ const updateProduct = async (
 	updateData: UpdateProductInput,
 ) => {
 	try {
-		const result = await Models.Product.updateOne(query, updateData);
-		return { modifiedCount: result.modifiedCount };
+		const result = await Models.Product.findOneAndUpdate(query, updateData, {
+			new: true,
+		});
+		return result;
 	} catch (error) {
 		throw new Error(
 			`Failed to update product: ${error instanceof Error ? error.message : "Unknown error"}`,

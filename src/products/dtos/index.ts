@@ -34,7 +34,7 @@ export const CreateProductDto = z.object({
 	name: z.string().min(1, "Name is required"),
 	cost: z.number().positive("Cost must be positive"),
 	quantity: z.number().int().positive("Quantity must be a positive integer"),
-	sellerId: z.string().min(1, "Seller ID is required"),
+	sellerId: zObjectId,
 });
 
 /**

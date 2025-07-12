@@ -83,6 +83,8 @@ vmRouterV1.post(
 				deposit: (req.ctx.user?.deposit ?? 0) + amount,
 			},
 		);
+
+		//TODO: push to transaction collection
 		res.status(200).json({
 			message: `your deposit is ${amount} and you currently have ${req.ctx.user?.deposit + amount}`,
 		});
@@ -122,6 +124,8 @@ vmRouterV1.post("/reset", async (req: Request, res: Response) => {
 			deposit: 0,
 		},
 	);
+
+	//TODO: push to transaction collection
 	res.status(200).json({
 		message: "your deposit is reseted",
 	});
