@@ -6,8 +6,8 @@ import {
 	validateRequest,
 	validateResponse,
 } from "../../../middleware";
-import { ERROR_CODES, NotFoundError } from "../../../shared";
-import { zObjectId } from "../../../shared/types";
+import { ERROR_CODES, NotFoundError, zObjectId } from "../../../shared";
+import { BcryptService, JWT } from "../../../utils";
 import {
 	CreateUserDto,
 	DeleteUserDto,
@@ -22,7 +22,9 @@ userRouterV1.post(
 	"/",
 	validateRequest({ body: CreateUserDto }),
 	async (req: Request, res: Response) => {
-		const user = await UserUseCase.createUser(req.body);
+		const { body } = req;
+		body.password = await BcryptService.hashPassword(body.password);
+		const user = await UserUseCase.createUser(body);
 		res.status(201).json(user);
 	},
 );
@@ -33,8 +35,20 @@ userRouterV1.get(
 		body: z.object({ username: z.string(), password: z.string() }),
 	}),
 	async (req: Request, res: Response) => {
-		const user = await UserUseCase.getUser(req.body);
-		res.status(200).json(user);
+		const user = await UserUseCase.getUser({ username: req.body.username });
+
+		if (!user) {
+			return NotFoundError(res, ERROR_CODES.USER_NOT_FOUND);
+		}
+
+		const passwordValidation = await BcryptService.comparePassword(
+			req.body.password,
+			user.password,
+		);
+		if (!passwordValidation) {
+			return NotFoundError(res, ERROR_CODES.USER_INVALID_CREDENTIALS);
+		}
+		res.status(200).json({ token: JWT.generateToken(user._id.toString()) });
 	},
 );
 

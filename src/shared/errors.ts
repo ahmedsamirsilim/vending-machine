@@ -8,12 +8,12 @@ export const BadRequestError = (res: Response) => {
 	return res.status(400).json({ error: "Bad Request" });
 };
 
-export const UnauthorizedError = (res: Response) => {
-	return res.status(401).json({ error: "Unauthorized" });
+export const UnauthorizedError = (res: Response, errorCode: string) => {
+	return res.status(401).json({ error: errorCode });
 };
 
-export const ForbiddenError = (res: Response) => {
-	return res.status(403).json({ error: "Forbidden" });
+export const ForbiddenError = (res: Response, errorCode: string) => {
+	return res.status(403).json({ error: errorCode });
 };
 
 export const InternalServerError = (res: Response) => {

@@ -1,7 +1,7 @@
-import { type Document, Schema, Types } from "mongoose";
+import { type Document, Schema } from "mongoose";
 
 export interface IUser extends Document {
-	name: string;
+	username: string;
 	password: string;
 	deposite?: number;
 	role: "buyer" | "seller";
@@ -11,8 +11,7 @@ export interface IUser extends Document {
 
 export const UserSchema = new Schema(
 	{
-		name: { type: String, required: true },
-		email: { type: String, required: true },
+		username: { type: String, required: true },
 		password: { type: String, required: true },
 		deposite: { type: Number, default: 0 },
 		role: { type: String, enum: ["buyer", "seller"], required: true },

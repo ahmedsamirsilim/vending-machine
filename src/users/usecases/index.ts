@@ -1,1 +1,1 @@
-export * as UserUseCase from "./user.usecase";
+export * from "./user.usecase";

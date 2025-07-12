@@ -22,9 +22,7 @@ const createProduct = async (
 	}
 };
 
-const findProduct = async (
-	query: FindProductInput,
-): Promise<ProductResponse | null> => {
+const findProduct = async (query: FindProductInput) => {
 	try {
 		const product = await Models.Product.findOne(query);
 		return product ? product.toObject() : null;
@@ -35,9 +33,7 @@ const findProduct = async (
 	}
 };
 
-const findProducts = async (
-	query: FindProductInput = {},
-): Promise<ProductResponse[]> => {
+const findProducts = async (query: FindProductInput = {}) => {
 	try {
 		const products = await Models.Product.find(query);
 		return products.map((product) => product.toObject());
@@ -51,7 +47,7 @@ const findProducts = async (
 const updateProduct = async (
 	query: FilterQuery<IProduct>,
 	updateData: UpdateProductInput,
-): Promise<{ modifiedCount: number }> => {
+) => {
 	try {
 		const result = await Models.Product.updateOne(query, updateData);
 		return { modifiedCount: result.modifiedCount };
@@ -62,9 +58,7 @@ const updateProduct = async (
 	}
 };
 
-const deleteProduct = async (
-	query: FilterQuery<IProduct>,
-): Promise<{ deletedCount: number }> => {
+const deleteProduct = async (query: FilterQuery<IProduct>) => {
 	try {
 		const result = await Models.Product.deleteOne(query);
 		return { deletedCount: result.deletedCount };

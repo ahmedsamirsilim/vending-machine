@@ -1,8 +1,8 @@
 import express, { type Express } from "express";
+import { MongodbService } from "./lib";
 import productsRouter from "./products/routes";
 import { env } from "./shared";
 import usersRouter from "./users/routes";
-import { MongodbService } from "./utils";
 
 const app: Express = express();
 const port = env.PORT || 3000;

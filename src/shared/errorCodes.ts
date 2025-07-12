@@ -1,6 +1,8 @@
 export const ERROR_CODES = {
 	//users
 	USER_NOT_FOUND: "U_001",
+	USER_INVALID_CREDENTIALS: "U_002",
+	USER_UNAUTHORIZED: "U_003",
 
 	//products
 	PRODUCT_NOT_FOUND: "P_001",
