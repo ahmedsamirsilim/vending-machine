@@ -44,7 +44,13 @@ pnpm install
 
 ### 3. Set up environment variables
 
-Create a `.env` file in the root of the project and add the following variables:
+To get started quickly, you can copy the test environment file to create your own local `.env` file:
+
+```bash
+cp .env.test .env
+```
+
+This will create a `.env` file with all the required variables. You can then customize the values in this file for your local setup. The file should include:
 
 ```env
 MONGO_URI=your_mongodb_connection_string
