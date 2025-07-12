@@ -1,23 +1,36 @@
 import type { NextFunction, Request, Response } from "express";
-import { Types } from "mongoose";
+import { ObjectId } from "mongodb";
 import { ERROR_CODES, UnauthorizedError } from "../shared";
+import { UserUseCase } from "../users/usecases";
 import { JWT } from "../utils";
 
-// Placeholder for authentication middleware
-export const authenticate = (
+export const authenticate = async (
 	req: Request,
 	_res: Response,
 	next: NextFunction,
 ) => {
-	const token = req.headers.authorization?.split(" ")[1];
-	if (!token) {
-		return UnauthorizedError(_res, ERROR_CODES.USER_UNAUTHORIZED);
-	}
+	try {
+		const token = req.headers.authorization?.split(" ")[1];
+		console.log(token);
+		if (!token) {
+			return UnauthorizedError(_res, ERROR_CODES.USER_UNAUTHORIZED);
+		}
 
-	const decodedToken = JWT.verifyToken(token);
-	if (!decodedToken) {
-		return UnauthorizedError(_res, ERROR_CODES.USER_UNAUTHORIZED);
-	}
+		const decodedToken = JWT.verifyToken(token);
+		if (
+			!decodedToken ||
+			typeof decodedToken === "string" ||
+			!decodedToken.userId
+		) {
+			return UnauthorizedError(_res, ERROR_CODES.USER_UNAUTHORIZED);
+		}
 
-	next();
+		const user = await UserUseCase.getUser({
+			_id: new ObjectId(decodedToken.userId),
+		});
+
+		next();
+	} catch (error) {
+		next(error);
+	}
 };

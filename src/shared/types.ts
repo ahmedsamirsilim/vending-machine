@@ -17,3 +17,5 @@ export const zObjectId = z
 	.transform((val) => {
 		return typeof val === "string" ? new ObjectId(val) : val;
 	});
+
+export const AvailableVMDepositeAmounts = [5, 10, 20, 50, 100];
