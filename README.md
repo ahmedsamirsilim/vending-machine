@@ -62,6 +62,10 @@ pnpm dev
 
 The server will be running at `http://localhost:3000`.
 
+## Recommended Editor Setup
+
+For the best development experience with Biome, it's recommended to install the [Biome VS Code extension](https://marketplace.visualstudio.com/items?itemName=biomejs.biome). This will provide real-time linting and formatting feedback in your editor.
+
 ## API Documentation
 
 Once the server is running, you can access the interactive Swagger API documentation at:
