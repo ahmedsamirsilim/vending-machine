@@ -7,8 +7,7 @@ export const authenticate = (
 	_res: Response,
 	next: NextFunction,
 ) => {
-	// In a real application, you would verify a token or session here
-	// For now, we'll attach a mock user to the request
+	console.log("auth");
 
 	next();
 };

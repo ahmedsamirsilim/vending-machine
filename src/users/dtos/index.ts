@@ -1,14 +1,16 @@
 import { z } from "zod";
 import { zObjectId } from "../../shared";
 
-export const UserSchema = z.object({
-	_id: zObjectId,
-	username: z.string(),
-	deposit: z.number(),
-	role: z.enum(["buyer", "seller"]),
-	createdAt: z.date(),
-	updatedAt: z.date(),
-});
+export const User = z
+	.object({
+		_id: zObjectId.optional(),
+		username: z.string().optional(),
+		deposit: z.number().optional(),
+		role: z.enum(["buyer", "seller"]).optional(),
+		createdAt: z.date().optional(),
+		updatedAt: z.date().optional(),
+	})
+	.partial();
 
 export const CreateUserDto = z.object({
 	username: z.string(),
@@ -38,7 +40,7 @@ export const DeleteUserDto = z.object({
 	id: zObjectId,
 });
 
-export type User = z.infer<typeof UserSchema>;
+export type UserSchema = z.infer<typeof User>;
 export type CreateUserInput = z.infer<typeof CreateUserDto>;
 export type UpdateUserInput = z.infer<typeof UpdateUserDto>;
 export type GetUserInput = z.infer<typeof GetUserDto>;

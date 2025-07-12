@@ -1,12 +1,12 @@
-import type { CreateUserInput, UpdateUserInput } from "../dtos";
+import type { CreateUserInput, UpdateUserInput, UserSchema } from "../dtos";
 import { UserService } from "../services";
 
 export const createUser = async (input: CreateUserInput) => {
 	return await UserService.createUser(input);
 };
 
-export const getUserById = async (id: string) => {
-	return await UserService.findUserById(id);
+export const getUser = async (query: UserSchema) => {
+	return await UserService.findUser(query);
 };
 
 export const getAllUsers = async () => {
